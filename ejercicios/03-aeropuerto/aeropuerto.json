@@ -1,0 +1,23 @@
+// * se busca controlar los vuelos que llegan de un lugar a otro
+// *
+// *
+
+// ? -- a que hora llega el vuelo
+// ? -- a que aerolinea pertenece , check *
+// ? -- Las caracteristicas del avion
+// ? -- el lugar de origen
+
+{
+    "id": 1,
+    "hora": "10:00",
+    "aerolinea": "Avianca",
+    "avion": {
+        "id": 1,
+        "modelo": "Boeing 747",
+        "capacidad": 100
+    },
+    "origen": {
+        "id": 1,
+        "nombre": "Bogota"
+    }
+}

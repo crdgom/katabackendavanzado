@@ -1,0 +1,12 @@
+{
+  "name": "kata-backend-avanzado",
+  "version": "1.0.0",
+  "description": "Clases del modulo de backend avanzado de de DEV.F",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["backend", "avanzado", "devf"],
+  "author": "Carlos Moctezuma @crdgom (twitter, LinkedIn and Github)",
+  "license": "MIT"
+}

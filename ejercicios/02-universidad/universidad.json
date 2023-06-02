@@ -1,0 +1,25 @@
+//  * Una universidad requiere llevar un registro de ex alumnos
+// * necesitan conocer los siguientes datos 
+
+// ? -- empleo
+// ? -- Lugar de trabajo
+// ? -- Información básica (nombre, apellido, edad, sexo, estado civil)
+// ? -- facultad y carrera
+
+
+{
+
+    "id": "ajsdhkajshd",
+    "nombre": "Juan",
+    "apellidos": "Perez",
+    "edad": 25,
+    "sexo": "M",
+    "estadoCivil": "Soltero",
+    "empleo": {
+        "lugar": "Google",
+        "cargo": "Desarrollador"
+    },
+    "facultad": "Ingenieria",
+    "carrera": "Sistemas"
+    
+}
