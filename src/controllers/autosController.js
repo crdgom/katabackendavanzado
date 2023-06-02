@@ -1,3 +1,4 @@
+import e from "express";
 import autoModel from "../models/autoModel.js";
 
 export const getAutos = (req, res) => {
@@ -13,9 +14,41 @@ export const getAutos = (req, res) => {
     }
 }   
 
-/* export const getAuto = async (req, res) => {
+export const getAuto = (req, res) => {
+    const { _id } = req.params;
     try{
-        const auto = await autosModel.findById(req.params.id);
+        const auto = autoModel.findById(_id);
+        auto.exec()
+        .then((auto) => {
+            res.json(auto);
+        })
+    }catch(e){
+        console.error(e);
+    }
+}
+
+// create an auto document in the autos collection
+
+export const createAuto = (req, res) => {
+    const { brand, model, version, price } = req.body;
+    try{
+        const auto = new autoModel({ brand, model, version, price });
+        auto.save()
+        .then((auto) => {
+            res.json(auto);
+        })
+    }catch(e){
+        console.error(e);
+    }
+}
+
+
+
+
+/* export const createAuto = (req, res) => {
+    const { brand, model, version, price } = req.body;
+    try{
+        const auto = await autoModel.save({ brand, model, version, price });
         res.json(auto);
     }catch(e){
         console.error(e);
