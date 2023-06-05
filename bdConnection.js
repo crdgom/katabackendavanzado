@@ -8,13 +8,15 @@ const options = {
     autoIndex: true,
 }
 
-mongoose.connect(dbConnection, options)
-.then(() => {
-    console.log('Conectado a la base de datos');
-})
-.catch((err) => {
-    console.error(err);
-});
+const execute = () => {
+    mongoose.connect(dbConnection, options)
+    .then(() => {
+        console.log('Conectado a la base de datos');
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+}
 
 const db = mongoose.connection;
 
@@ -23,4 +25,4 @@ db.once('open', () => {
     console.log('Conectado a la base de datos');
 });
 
-export default db;
+export  {execute};

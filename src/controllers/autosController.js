@@ -15,17 +15,26 @@ export const getAutos = (req, res) => {
 }   
 
 export const getAuto = (req, res) => {
-    const { _id } = req.params;
-    try{
-        const auto = autoModel.findById(_id);
-        auto.exec()
+    const { id } = req.params;
+    try {
+      const auto = autoModel.findById(id);
+      auto.exec()
         .then((auto) => {
+          if (auto) {
             res.json(auto);
+          } else {
+            res.status(404).json({ message: 'Auto no encontrado' });
+          }
         })
-    }catch(e){
-        console.error(e);
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: 'Error al obtener el auto' });
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al obtener el auto' });
     }
-}
+  };
 
 // create an auto document in the autos collection
 
@@ -43,14 +52,48 @@ export const createAuto = (req, res) => {
 }
 
 
+// update an auto document in the autos collection
 
-
-/* export const createAuto = (req, res) => {
+export const updateAuto = (req, res) => {
+    const { id } = req.params;
     const { brand, model, version, price } = req.body;
     try{
-        const auto = await autoModel.save({ brand, model, version, price });
-        res.json(auto);
-    }catch(e){
+        const auto = autoModel.findByIdAndUpdate( id, { brand, model, version, price } , { new: true });
+        auto.exec()
+        .then((auto) => {
+        if (auto) {
+            res.json(auto);
+            } else {
+            res.status(404).json({ message: 'Auto no encontrado' });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ message: 'Error al obtener el auto' });
+        });
+    }catch (e) {
         console.error(e);
+        res.status(500).json({ message: 'Error al obtener el auto1' });
+      }
+}
+
+
+// delete an auto document in the autos collection
+
+export const deleteAuto = (req, res) => {
+    const { id } = req.params;
+    try {
+      const auto = autoModel.deleteOne({ _id: id });
+      auto.exec()
+        .then((result) => {
+          res.json(result);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: 'Error al eliminar el auto' });
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al eliminar el auto' });
     }
-} */
+  };
