@@ -1,5 +1,5 @@
-import e from "express";
 import autoModel from "../models/autoModel.js";
+import brandsModel from "../models/brandsModel.js";
 
 export const getAutos = (req, res) => {
     try{
@@ -38,18 +38,32 @@ export const getAuto = (req, res) => {
 
 // create an auto document in the autos collection
 
-export const createAuto = (req, res) => {
-    const { brand, model, version, price } = req.body;
-    try{
-        const auto = new autoModel({ brand, model, version, price });
-        auto.save()
+export const createAuto = async (req, res) => {
+  const { brand, model, version, price } = req.body;
+
+  try {
+    const foundBrand = await brandsModel.findOne({ brand }).exec();
+
+    if (foundBrand) {
+      const auto = new autoModel({ brand: foundBrand._id, model, version, price });
+      auto.save()
         .then((auto) => {
-            res.json(auto);
+          res.json(auto);
         })
-    }catch(e){
-        console.error(e);
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: 'Error al crear el auto' });
+        });
+    } else {
+      res.status(404).json({ message: 'Marca no encontrada' });
     }
-}
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener la marca' });
+  }
+};
+
+
 
 
 // update an auto document in the autos collection

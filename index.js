@@ -1,8 +1,8 @@
 import express from "express";
 import helmet from "helmet";
 import {execute} from "./bdConnection.js";
-import autosRoutes from "./src//routes/autosRoutes.js";
-
+import autosRoutes from "./src/routes/autosRoutes.js";
+import brandsRoutes from "./src/routes/brandsRoutes.js";
 
 async function main(){
     try{
@@ -17,6 +17,7 @@ async function main(){
     app.use(express.urlencoded({ extended: false }));
     app.disable("x-powered-by");
     app.use(autosRoutes)
+    app.use(brandsRoutes)
     execute();
 
     app.listen(3000, () => {

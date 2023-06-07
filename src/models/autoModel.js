@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 const autoSchema = new mongoose.Schema({
     brand: {
-        type: String,
-        required: true,
-        trim: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'brands'
     },
     model: {
         type: Number,
