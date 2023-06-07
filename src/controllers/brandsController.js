@@ -15,7 +15,23 @@ export const getBrands =  (req, res) => {
 };
 
 export const getBrand =  (req, res) => {
-    try{}
+    try{
+        const { id } = req.params;
+        const brand = brandsModel.findById(id);
+        brand.exec()
+        .then((brand) => {
+            if(brand){
+                res.json(brand);
+            }
+            else{
+                res.status(404).json({ message: 'Brand not found' });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ message: 'Error getting the brand' });
+        });
+    }
     catch(e){}
 };
 
@@ -34,11 +50,28 @@ export const createBrand = (req, res) => {
 };
 
 export const updateBrand =  (req, res) => {
-    try{}
+
+    const { id } = req.params;
+    const { brand, branch, country, contact } = req.body;
+    try{
+        const updateBrand = brandsModel.findByIdAndUpdate(id, { brand, branch, country, contact }, { new: true });
+        updateBrand.exec()
+        .then((brand) => {
+            res.json(brand);
+        }
+        )
+    }
     catch(e){}
 };
 
 export const deleteBrand =  (req, res) => {
-    try{}
+    const { id } = req.params;
+    try{
+        const deleteBrand = brandsModel.findByIdAndDelete(id);
+        deleteBrand.exec()
+        .then(() => {
+            res.json({ message: 'Brand deleted' });
+        })
+    }
     catch(e){}
 };

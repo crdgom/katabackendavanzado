@@ -45,10 +45,34 @@ export const createAuto = async (req, res) => {
     const foundBrand = await brandsModel.findOne({ brand }).exec();
 
     if (foundBrand) {
-      const auto = new autoModel({ brand: foundBrand._id, model, version, price });
+      const auto = new autoModel({
+        brand: {
+          _id: foundBrand._id,
+          name: foundBrand.brand,
+          branch: foundBrand.branch,
+          country: foundBrand.country,
+          contact: foundBrand.contact
+        },
+        model,
+        version,
+        price
+      });
+
       auto.save()
         .then((auto) => {
-          res.json(auto);
+          const { brand, model, version, price } = auto;
+          res.json({
+            brand: {
+              _id: foundBrand._id,
+              name: foundBrand.brand,
+              branch: foundBrand.branch,
+              country: foundBrand.country,
+              contact: foundBrand.contact,
+            },
+            model,
+            version,
+            price
+          });
         })
         .catch((error) => {
           console.error(error);
@@ -62,6 +86,7 @@ export const createAuto = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener la marca' });
   }
 };
+
 
 
 
