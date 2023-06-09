@@ -3,7 +3,7 @@ import brandsModel from "../models/brandsModel.js";
 
 export const getAutos = (req, res) => {
     try{
-        const autos = autoModel.find({});
+        const autos = autoModel.find({}).populate('brand');
 
         autos.exec()
         .then((autos) => {
@@ -17,7 +17,7 @@ export const getAutos = (req, res) => {
 export const getAuto = (req, res) => {
     const { id } = req.params;
     try {
-      const auto = autoModel.findById(id);
+      const auto = autoModel.findById(id).populate('brand');
       auto.exec()
         .then((auto) => {
           if (auto) {
