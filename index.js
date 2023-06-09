@@ -18,6 +18,8 @@ async function main(){
     app.disable("x-powered-by");
     app.use(autosRoutes)
     app.use(brandsRoutes)
+    app.set("view engine", "ejs");
+    app.set("views", "./src/views"); // modificar la ruta de las vistas
     execute();
 
     app.listen(3000, () => {

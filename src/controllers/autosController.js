@@ -12,7 +12,18 @@ export const getAutos = (req, res) => {
     }catch(e){
         console.error(e);
     }
-}   
+}
+
+
+export const getAutosView = async (req, res) => {
+    try{
+        const autos = await autoModel.find({}).populate('brand');
+        res.render('index', { autos });
+    }catch(e){
+        console.error(e);
+    }
+}
+
 
 export const getAuto = (req, res) => {
     const { id } = req.params;
