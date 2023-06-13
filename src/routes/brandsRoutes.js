@@ -7,7 +7,7 @@ const router = Router();
 
 // ? endpoints for Brands routes (getBrands, getBrand, createBrand, updateBrand, deleteBrand)
 
-router.get('/api/v1/getBrands', verificar, getBrands);
+router.get('/api/v1/getBrands', getBrands);
 router.get('/api/v1/getBrand/:id',getBrand);
 router.post('/api/v1/createBrand', createBrand);
 router.put('/api/v1/updateBrand/:id',updateBrand);
