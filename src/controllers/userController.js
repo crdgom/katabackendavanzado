@@ -1,8 +1,11 @@
-import userController from '../controllers/userController';
+import userModel from "../models/userModel.js";
+import { encryptPassword, comparePassword } from "../models/userModel.js";
+import Jwt from "jsonwebtoken";
+import { SECRET } from "../config/config.js";
 
 export const getUsers = async (req, res) => {
     try{
-        const users = await userController.find();
+        const users = await userModel.find();
         res.status(200).json(users);
     }
     catch(e){
@@ -13,7 +16,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
     const { id } = req.params;
     try{
-        const user = await userController.findById(id);
+        const user = await userModel.findById(id);
         res.status(200).json(user);
     }
     catch(e){
@@ -23,21 +26,33 @@ export const getUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
     const {userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage} = req.body;
-    try{
-        const newUser = new userController({userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage});
-        await newUser.save();
-        res.status(201).json(newUser);
-    }
-    catch(e){
-        res.status(404).json({message: e.message});
-    }
+
+        const newUser = new userModel({
+            userAlias,
+            userName,
+            userLastName,
+            userAge,
+            userMail,
+            userPassword: await encryptPassword(userPassword),
+            userPhone,
+            userAddress,
+            userType,
+            userStatus,
+            userImage
+        });
+        const saveUser = await newUser.save();
+        
+        const token = Jwt.sign({id: saveUser._id}, SECRET, { algorithm: 'RS256' }, {
+            expiresIn: 86400 // 24 horas
+        });
+        res.status(200).json({token});
 };
 
 export const updateUser = async (req, res) => {
     const { id } = req.params;
     const {userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage} = req.body;
     try{
-        const updatedUser = await userController.findByIdAndUpdate(id, {userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage}, {new: true});
+        const updatedUser = await userModel.findByIdAndUpdate(id, {userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage}, {new: true});
         res.status(200).json(updatedUser);
     }
     catch(e){
@@ -48,8 +63,28 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
     try{
-        await userController.findByIdAndDelete(id);
+        await userModel.findByIdAndDelete(id);
         res.status(200).json({message: 'User deleted successfully'});
     }
     catch(e){}
 };
+
+
+export const userLogin = async (req, res) => {
+    // buscar el usuario en la base de datos
+    const findUser = await userModel.findOne({userMail: req.body.userMail});
+    if(!findUser) return res.status(400).json({message: 'User not found'});
+
+    // validar la contraseña
+    const matchPassword = await comparePassword(req.body.userPassword, findUser.userPassword);
+    if(!matchPassword) return res.status(401).json({token: null, message: 'Invalid password'});
+
+    // crear el token
+
+    const token = Jwt.sign({id: findUser._id}, SECRET, {
+        // expira en 5 horas
+        expiresIn: 18000
+    });
+
+    res.json({token});
+}

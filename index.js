@@ -3,6 +3,7 @@ import helmet from "helmet";
 import {execute} from "./bdConnection.js";
 import autosRoutes from "./src/routes/autosRoutes.js";
 import brandsRoutes from "./src/routes/brandsRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 
 async function main(){
     try{
@@ -18,6 +19,7 @@ async function main(){
     app.disable("x-powered-by");
     app.use(autosRoutes)
     app.use(brandsRoutes)
+    app.use(userRoutes)
     app.set("view engine", "ejs");
     app.set("views", "./src/views"); // modificar la ruta de las vistas
     execute();

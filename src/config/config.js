@@ -1,0 +1,1 @@
+export const SECRET = ' kjadsf_a2893nijos@273..yq36uq$"##%&#"/$'

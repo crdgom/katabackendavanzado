@@ -38,7 +38,7 @@ export const getBrand =  (req, res) => {
 export const createBrand = (req, res) => {
     const { brand, branch, country, contact } = req.body;
     try{
-        const newBrand = new brandsModel({ brandId, branch, country, contact });
+        const newBrand = new brandsModel({ brand, branch, country, contact });
         newBrand.save()
         .then((brand) => {
             res.json(brand);

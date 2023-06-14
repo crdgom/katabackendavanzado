@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
     userAlias: {
@@ -51,7 +52,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['admin', 'user', 'guest'],
         default: 'guest',
-        required: true,
         trim: true,
     },
     userStatus: {
@@ -67,6 +67,15 @@ const userSchema = new mongoose.Schema({
         trim: true,
     },
 })
+
+export const encryptPassword = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+}
+
+export const comparePassword = async (userPassword, receivedPassword) => {
+    return await bcrypt.compare(userPassword, receivedPassword);
+}
 
 const userModel = mongoose.model('users', userSchema);
 

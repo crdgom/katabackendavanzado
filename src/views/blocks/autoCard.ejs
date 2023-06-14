@@ -1,0 +1,14 @@
+<!--  create a car card for each car, using the data from the database and including the brand name -->
+<% autos.forEach(auto => { %>
+        <div class="card" style="width: 18rem;">
+            <img src="<%= auto.image %>" class="card-img-top" alt="<%= auto.brand %>">
+            <div class="card-body">
+                <h2 class="card-title"><%= auto.brand ? auto.brand.brand : 'N/A'  %></h2>
+            <ul>
+                <li class="card-text">Brand: <%= auto.model %></li>
+                <li class="card-text">Branch: <%= auto.brand ? auto.brand.branch : 'N/A' %></li>
+                <li class="card-text">Country: <%= auto.brand ? auto.brand.country : 'N/A' %></li>
+                <li class="card-text">Price: <%= auto.price %></li>
+            </ul>
+        </div>
+<% }); %>
