@@ -71,7 +71,7 @@ export const createAuto = async (req, res) => {  // creo la funcion asincrona
 
       auto.save() // guardo el auto
         .then((auto) => { // si se guardo correctamente
-          const { brand, model, version, price } = auto; // recupero los datos del auto guardado en formato json
+          const { model, version, price } = auto; // recupero los datos del auto guardado en formato json
           res.json({
             brand: { 
               _id: foundBrand._id,
