@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { getUsers, getUser, createUser, updateUser, deleteUser, userLogin} from '../controllers/userController.js';
-import { encryptPassword, comparePassword  } from '../models/userModel.js';
 import { userDeletionValidation } from '../middleware/userDeletionMiddleware.js';
 
 const router = Router();

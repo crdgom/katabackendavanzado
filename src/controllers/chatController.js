@@ -1,0 +1,36 @@
+import { Configuration, OpenAIApi } from "openai";
+import axios from "axios";
+import 'dotenv/config'
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
+
+const startConversation = async (req, res) => {
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: "Hello world" },
+      ],
+    });
+
+    axios
+      .post("https://api.openai.com/v1/chat/completions", completion)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    res.status(200).json({ message: "Conversation started successfully." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export { startConversation };
