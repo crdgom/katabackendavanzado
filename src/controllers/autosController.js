@@ -1,5 +1,9 @@
 import autoModel from "../models/autoModel.js";
 import brandsModel from "../models/brandsModel.js";
+import aws from 'aws-sdk';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
+import 'dotenv/config';
 
 export const getAutos = (req, res) => {
     try{
@@ -25,31 +29,57 @@ export const getAutosView = async (req, res) => {
 }
 
 
-export const getAuto = (req, res) => { // creo la funcion asincrona getAuto
+export const getAuto = (req, res) => { // creo la función asíncrona getAuto
     const { id } = req.params; // recupero el id del auto a buscar desde la URL
     try {
       const auto = autoModel.findById(id).populate('brand'); // busco el auto por el id y con el populate traigo los datos de la marca
-      auto.exec() // ejecuto la busqueda
+      auto.exec() // ejecuto la búsqueda
         .then((auto) => {
           if (auto) { // si el auto existe
             res.json(auto); // lo muestro en el body de la respuesta
           } else {
-            res.status(404).json({ message: 'Auto no encontrado' }); // si no existe muestro el error 404 que no se encontro el auto
+            res.status(404).json({ message: 'Auto no encontrado' }); // si no existe muestro el error 404 que no se encontró el auto
           }
         })
         .catch((error) => {
           console.error(error);
-          res.status(500).json({ message: 'Error al obtener el auto' });  // si no se encontro el auto muestro el error 500
+          res.status(500).json({ message: 'Error al obtener el auto' });  // si no se encontró el auto muestro el error 500
         });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error al obtener el auto' }); // si no se encontro el auto muestro el error 500
+      res.status(500).json({ message: 'Error al obtener el auto' }); // si no se encontró el auto muestro el error 500
     }
   };
 
 // create an auto document in the autos collection
 
-export const createAuto = async (req, res) => {  // creo la funcion asincrona
+// crear función de multer para subir la imagen del auto.
+
+// configuracion del bucket de S3
+
+/* aws.config.update({
+    secretAccessKey: process.env.AWS_ACCESS,
+    accessKeyId: process.env.AWS_SECRET,
+    region: process.env.AWS_REGION,
+  });
+
+const s3 = aws.S3(); // creo la instancia de S3
+
+const uploadCarImage = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: process.env.AWS_BUCKET_NAME,
+      acl: 'public-read',
+      contentType: multerS3.AUTO_CONTENT_TYPE,
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: 'TESTING_METADATA' });
+      },
+      key: function (req, file, cb) {
+        cb(null, file.originalname);
+      }
+}) */
+
+export const createAuto = async (req, res) => {  // creo la función asíncrona
   const { brand, model, version, price } = req.body; // recupero los datos del body en formato json
 
   try {
@@ -61,7 +91,7 @@ export const createAuto = async (req, res) => {  // creo la funcion asincrona
           _id: foundBrand._id, // le asigno el id de la marca encontrada
           name: foundBrand.brand, // le asigno el nombre de la marca encontrada
           branch: foundBrand.branch, // le asigno la sucursal de la marca encontrada
-          country: foundBrand.country, // le asigno el pais de la marca encontrada
+          country: foundBrand.country, // le asigno el país de la marca encontrada
           contact: foundBrand.contact // le asigno el contacto de la marca encontrada
         },
         model, // le asigno el modelo del auto desde el body
@@ -104,26 +134,26 @@ export const createAuto = async (req, res) => {  // creo la funcion asincrona
 
 // update an auto document in the autos collection
 
-export const updateAuto = (req, res) => { // creo la funcion asincrona
+export const updateAuto = (req, res) => { // creo la función asíncrona
     const { id } = req.params; // recupero el id del auto a buscar desde la URL
     const { brand, model, version, price } = req.body; // recupero los datos del body en formato json (los datos a actualizar se puede pasar cualquiera o todos)
     try{
         const auto = autoModel.findByIdAndUpdate( id, { brand, model, version, price } , { new: true }); // busco el auto por el id y actualizo los datos con los datos del body (solo los de el auto, la marca no se actualiza acá)
-        auto.exec() // ejecuto la busqueda
+        auto.exec() // ejecuto la búsqueda
         .then((auto) => {
         if (auto) { // si el auto existe
             res.json(auto); // lo muestro en el body de la respuesta con el brand( solo el id, el resto de los datos se pueden obtener con el populate)
             } else {
-            res.status(404).json({ message: 'Auto no encontrado' }); // si no existe muestro el error 404 que no se encontro el auto
+            res.status(404).json({ message: 'Auto no encontrado' }); // si no existe muestro el error 404 que no se encontró el auto
             }
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).json({ message: 'Error al obtener el auto' }); // si no se encontro el auto muestro el error 500
+            res.status(500).json({ message: 'Error al obtener el auto' }); // si no se encontró el auto muestro el error 500
         });
     }catch (e) {
         console.error(e);
-        res.status(500).json({ message: 'Error al obtener el auto1' }); // si no se encontro el auto muestro el error 500
+        res.status(500).json({ message: 'Error al obtener el auto1' }); // si no se encontró el auto muestro el error 500
       }
 }
 

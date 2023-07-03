@@ -1,4 +1,4 @@
-import Jwt from "jsonwebtoken";
+/* import Jwt from "jsonwebtoken";
 import { SECRET } from "../config/config.js";
 import userModel from "../models/userModel.js";
 
@@ -12,7 +12,7 @@ import userModel from "../models/userModel.js";
     });
 }; */
 
- const validate = async (req, res, next) => {
+/* export const validate = async (req, res, next) => {
     try{
         let token = req.headers['x-access-token']
 
@@ -32,4 +32,17 @@ import userModel from "../models/userModel.js";
     
 }
 
-export default validate;
+export const validateSessionCookie = async (req, res, next) => {
+    try{
+        
+        if (req.session.loggedIn && req.cookie.user) {
+            return next();
+        } else {
+            res.redirect('/login');
+        }
+
+    }catch(e){
+        res.json({message: "Error en la verificacion"})
+    }
+    
+}; */

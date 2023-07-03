@@ -25,7 +25,7 @@ export const getUser = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-    const {userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage} = req.body;
+    const {userAlias, userName, userLastName, userAge, userMail, userPassword, userPhone, userAddress, userType, userStatus, userImage, rol} = req.body;
 
         const newUser = new userModel({
             userAlias,
@@ -38,7 +38,8 @@ export const createUser = async (req, res) => {
             userAddress,
             userType,
             userStatus,
-            userImage
+            userImage,
+            rol
         });
         const saveUser = await newUser.save();
         
@@ -66,7 +67,9 @@ export const deleteUser = async (req, res) => {
         await userModel.findByIdAndDelete(id);
         res.status(200).json({message: 'User deleted successfully'});
     }
-    catch(e){}
+    catch(e){
+        res.status(404).json({message: e.message});
+    }
 };
 
 
@@ -85,6 +88,7 @@ export const userLogin = async (req, res) => {
         // expira en 5 horas
         expiresIn: 18000
     });
+    res.redirect('/api/v1/getAutosView')
 
     res.json({token});
 }

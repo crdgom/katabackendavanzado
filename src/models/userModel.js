@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
         validate: function (value) {
-            const mailFormat = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+            const mailFormat = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
             return mailFormat.test(value);
         }
     },
